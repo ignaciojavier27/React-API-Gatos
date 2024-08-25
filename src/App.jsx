@@ -1,37 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useState } from 'react';
 import { ENDPOINT_FACT, ENDPOINT_IMG } from './constants';
-import { fetchFact } from './helpers/fetchFact.js';
+import { useFetchFact } from './helpers/useFetchFact.js';
 import './App.css'
 
 const App = () => {
-    const [fact, setFact] = useState();
-    const [imgUrl, setImgUrl] = useState();
-    const [firstWord, setFirstWord] = useState();
-    const [isLoading, setIsLoading] = useState(true);
+
     const [getFact, setGetFact] = useState(true);
-
-
-    const getRandomFact = () => {
-        setIsLoading(true)
-        fetchFact({ endpointFact: ENDPOINT_FACT, endpointImg: ENDPOINT_IMG })
-            .then(({ fact, newFirstWord, newImgUrl }) => {
-                setFact(fact);
-                setFirstWord(newFirstWord);
-                setImgUrl(newImgUrl);
-            })
-            .catch(error => {
-                console.error('Error fetching fact:', error);
-                setIsLoading(false);
-            });
-    }
-
-    useEffect(getRandomFact, [getFact]);
-
-    const handleImageLoad = () => {
-        console.log('Cargó la imagen')
-        setIsLoading(false)
-    };
+    const { fact, imgUrl, firstWord} = useFetchFact({ endpointFact: ENDPOINT_FACT, endpointImg: ENDPOINT_IMG, getFact })
 
     const handleClick = () => {
         setGetFact(!getFact)
@@ -48,16 +24,10 @@ const App = () => {
                             src={imgUrl} 
                             alt={firstWord} 
                             width={500}
-                            onLoad={handleImageLoad}
-                            style={{ display: !isLoading ? 'block' : 'none' }}
                         />
                     )
                 }
-                {
-                    !isLoading
-                        ? fact && <p>{fact}</p>
-                        : 'Cargando...'
-                }
+                {fact && <p>{fact}</p>}
 
             </section>
         </main>
