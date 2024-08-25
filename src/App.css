@@ -1,0 +1,19 @@
+main{
+    display: flex;
+    flex-direction: column;
+    place-items: center;
+    margin:0 20px;
+}
+
+.container-info{
+    display: flex;
+    justify-content: space-around;
+    & p{
+        max-width: 60%;
+    }
+    & img{
+        max-width: 30%;
+        min-width: 30%;
+        height: auto;
+    }
+}
